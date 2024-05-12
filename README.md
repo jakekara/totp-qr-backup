@@ -1,6 +1,6 @@
 # totp-qr-backup
 
-Python CLI script for making printer-friendly backups of your TOTP QR codes to print out and store somewhere safe.
+Python CLI script to scan and printer-friendly backups of your TOTP QR codes to print out and store somewhere safe.
 
 ## Quick start
 
