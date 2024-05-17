@@ -20,7 +20,7 @@ qr-backup digest out > digest.html
 
 ## Sample output
 
-You can see the digest created in the quickstart example [here](https://htmlpreview.github.io/?https://github.com/jakekara/totp-qr-backup/blob/main/demo/digest.html), and the source is in the[demo/digest.html](demo/digest.html) file.
+You can see the digest created in the quickstart example [here](https://htmlpreview.github.io/?https://github.com/jakekara/totp-qr-backup/blob/main/demo/digest.html), and the source is in the [demo/digest.html](demo/digest.html) file.
 
 The input QR codes came from [this gist](https://gist.github.com/kcramer/c6148fb906e116d84e4bde7b2ab56992) 
 
