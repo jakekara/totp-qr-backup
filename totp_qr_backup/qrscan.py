@@ -1,11 +1,15 @@
+"""
+Subcommand to scan QR codes by camera and write them to a directory
+"""
+
 import argparse
 from hashlib import sha256
 import os
 from urllib.parse import parse_qs, unquote, urlparse
 
 import cv2
+import pyotp
 from pyzbar.pyzbar import decode
-import qrcode
 
 def add_arguments(parser:argparse.ArgumentParser):
     parser.add_argument("out_dir")
@@ -16,7 +20,7 @@ def watch_for_qr_codes():
 
     last_qr = None
     while(True):
-        ret, frame = vid.read()
+        _, frame = vid.read()
         cv2.imshow('frame', frame) 
         if cv2.waitKey(1) & 0xFF == ord('q'): 
             break
@@ -37,12 +41,9 @@ def get_filename_from_totp(totp_str: str):
     
     hash = sha256(totp_str.encode("utf-8")).hexdigest()[:8]
 
-    parsed_url = urlparse(totp_str)
-    data = parse_qs(parsed_url.query)
-    issuer = data["issuer"][0]
-    path = unquote(parsed_url.path).strip().strip("/").replace("/","_").replace(":","_")
+    otp = pyotp.parse_uri(totp_str)
 
-    fname = f"{issuer} - {path} - {hash}"
+    fname = f"{otp.issuer} - {otp.name} - {hash}"
 
     return fname
 
@@ -63,7 +64,3 @@ def main(args):
         
         print(f"* Wrote QR code to {full_file_path}")
 
-        # Write the png
-        img = qrcode.make(qr_text)
-        full_img_file_path = os.path.join(out_dir, f"{file_name}.png")
-        img.save(full_img_file_path)
