@@ -5,7 +5,6 @@ Subcommand to scan QR codes by camera and write them to a directory
 import argparse
 from hashlib import sha256
 import os
-from urllib.parse import parse_qs, unquote, urlparse
 
 import cv2
 import pyotp
