@@ -1,21 +1,18 @@
+"""
+Subcommand for creating an HTML digest of all codes in a directory.
+"""
+
 import argparse
 from base64 import b64encode
 import io
 import os
 from textwrap import dedent
-from urllib.parse import parse_qs, urlparse
 
 import pyotp
 import qrcode
 
 def add_arguments(parser: argparse.ArgumentParser):
     parser.add_argument("qr_dir")
-
-# def get_args() -> argparse.Namespace:
-
-#     parser = argparse.ArgumentParser()
-#     parser.add_argument("qr_dir", type=str, help="qr directory")
-#     return parser.parse_args()
 
 def make_html(dir_path):
    
@@ -30,13 +27,13 @@ def make_html(dir_path):
         qr_text = open(text_file_path, "r").read()
         otp = pyotp.parse_uri(qr_text)
 
-        ret += "<div class='qr-section'>"
+        ret += "<div class='qr-section'>\n"
 
-        ret += f"<h2>{otp.issuer} - {otp.name}</h2>"
+        ret += f"<h2>{otp.issuer} - {otp.name}</h2>\n"
 
-        ret += "<div style='display:flex'>"
+        ret += "<div style='display:flex'>\n"
 
-        ret += "    <div>"
+        ret += "<div>\n"
 
         img_pil = qrcode.make(qr_text)
         img_binary = io.BytesIO()
@@ -45,30 +42,28 @@ def make_html(dir_path):
         img_b64 = b64encode(img_binary).decode("utf-8")
 
 
-        ret += f"<img width='200px' src='data:image/png;base64, {img_b64}' /><br/>"
+        ret += f"<img width='200px' src='data:image/png;base64, {img_b64}' /><br/>\n"
         
-        ret += "    </div>"
+        ret += "</div>\n"
 
-        ret += "    <div>"
+        ret += "<div>\n"
 
         keys_to_serialize = ["issuer", "name", "secret", "digest", "digits"]
 
         for key in keys_to_serialize:
-            ret += f"<code>{key}={getattr(otp, key)}</code><br/>"
+            ret += f"<code>{key}={getattr(otp, key)}</code><br/>\n"
 
-        ret += "<br>"
-        ret += f"<code>uri={qr_text}</code>"
-        ret += "    </div>"
-
-        ret += "</div>"
-
-        ret += "</div>"
+        ret += "<br>\n"
+        ret += f"<code>uri={qr_text}</code>\n"
+        ret += "</div>\n"
+        ret += "</div>\n"
+        ret += "</div>\n"
                 
    return ret
 
 def html_style():
 
-    # Avoid breaking a qr section when printing
+    """Get CSS to avoid breaking a qr section when printing"""
 
     return dedent(
         """
@@ -86,8 +81,8 @@ def html_style():
 def html_top_section():
 
     ret = ""
-    ret += "<h1>QR Code Digest</h1>"
-    ret += "<p>Print this document and store it in a secure location.<p>"
+    ret += "<h1>QR Code Digest</h1>\n"
+    ret += "<p>Print this document and store it in a secure location.<p>\n"
 
     return ret
 
